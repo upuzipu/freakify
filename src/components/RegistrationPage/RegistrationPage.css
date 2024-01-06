@@ -29,6 +29,7 @@ input {
     min-width: 160px;
     text-transform: uppercase;
     white-space: normal;
+    cursor: pointer;
 }
 
 input:hover {

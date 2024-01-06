@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import "./RegistrationPage.css"
+import {useNavigate} from "react-router-dom";
 
 
 export function RegistrationPage() {
@@ -7,8 +8,19 @@ export function RegistrationPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigate = useNavigate();
+    const navigateToLogin = () => {
+        navigate('/login')
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (name.length > 0 && email.length > 0 && password.length > 0) {
+            navigateToLogin()
+        }
+        else {
+            alert('xd')
+        }
     };
 
     return (
@@ -37,7 +49,7 @@ export function RegistrationPage() {
                     </h3>
                     <input name="password" type="password"/>
                     <h3/>
-                    <input value={'Submit'} type="submit" name="registerAccount" />
+                    <input value={'BE FREAK'} type="submit" name="registerAccount" />
                 </div>
             </form>
         </div>

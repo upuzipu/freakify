@@ -47,7 +47,7 @@ p,
 h1,
 h2,
 h3 {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
 }
 
@@ -84,10 +84,10 @@ p {
 body {
     font-family: 'Proxima Nova', Georgia, sans-serif;
     background-repeat: no-repeat, repeat;
-    width: 100%;
-    height: 850px;
     background-image: linear-gradient(rgb(43, 110, 53), rgb(4, 11, 5));
     color: #fff;
+    width: 100%;
+    height: 850px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0;
