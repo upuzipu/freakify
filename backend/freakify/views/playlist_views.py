@@ -19,6 +19,7 @@ def playlistToJson(albums):
         response['id'] = i.playlist_id
         response['name'] = str(i.playlist_name)
         response['artist'] =i.creator.nickname
+        response['update_time'] = i.update_time
         response['creation_date'] = i.creation_date
         responses.append(response)
     httpResponse["result"] = 'success'
