@@ -59,48 +59,61 @@ def getAllPlaylistsByCreator(request,creator_id):
     albums= Playlist.objects.filter(creator__exact=creator_id)
     return playlistToJson(albums)
 @csrf_exempt
-def addMusicToPlaylist(request, playlist_id):
+def addMusicToPlaylist(request, playlist_id,song_id):
+    if(request.method!="POST"):
+        return returnErrorResponse(405, "ALLOWED METHOD: POST")
+
     data = request.POST
     try:
         hasAuthority(data,playlist_id)
-        song_id = data['track_id']
-        if Song.objects.filter(song_id__exact=song_id).exists():
-            PlaylistSongs(song = Song.objects.get(song_id=song_id),playlist = Playlist.objects.get(playlist_id=playlist_id)).save()
-
-        else:
-            return returnErrorResponse(404, "Песня не найдена")
-        return returnSuccessResponse(201)
     except:
         return returnErrorResponse(403, "Не авторизован")
+    if Song.objects.filter(song_id__exact=song_id).exists():
+        try:
+            PlaylistSongs(song = Song.objects.get(song_id=song_id),playlist = Playlist.objects.get(playlist_id=playlist_id)).save()
+        except:
+                return returnErrorResponse(409, "Already in playlist")
+
+    else:
+        return returnErrorResponse(404, "Песня не найдена")
+    return returnSuccessResponse(201)
+    
         
 
 @csrf_exempt
-def removeMusicFromPlaylist(request, playlist_id):
-    data = request.POST
-    try:
-        hasAuthority(data,playlist_id)
-        song_id = data['track_id']
+def removeMusicFromPlaylist(request, playlist_id,song_id):
+    if(request.method == "PSOT"):
+        data = request.POST
+        
+        try:
+            hasAuthority(data,playlist_id)
+        except:
+                return returnErrorResponse(403, "Не авторизован")
         if Song.objects.filter(song_id__exact=song_id).exists():
             PlaylistSongs.objects.filter(song_id=song_id).filter(playlist_id=playlist_id).delete()
         else:
             return returnErrorResponse(404, "Песня не найдена")
         return returnSuccessResponse(201)
-    except:
-            return returnErrorResponse(403, "Не авторизован")
+    
+    else:return returnErrorResponse(405, "ALLOWED METHOD: POST")
 
 @csrf_exempt
 def addNewPlaylist(request):
-    data = request.POST
-    try:
-        date =datetime.now()
-
-        creator_id = authorized(data)
+    if(request.method=="POST"):
+        data = request.POST
+        try:
+            date =datetime.now()
+            creator_id = authorized(data)
+        except:
+            return returnErrorResponse(403, "Не авторизован")
         print(creator_id)
         name= data['playlist_name']
         Playlist(creator = Person.objects.get(person_id__exact=creator_id),playlist_name=name, creation_date=str(date), update_time = str(date)).save()
         return returnSuccessResponse(201)
-    except:
-        return returnErrorResponse(403, "Не авторизован")
+    else:return returnErrorResponse(405, "ALLOWED METHOD: POST")
+
+        
+    
     
 
     

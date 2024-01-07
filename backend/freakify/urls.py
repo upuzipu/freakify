@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import views, song_views, album_views,playlist_views
+from .views import views, song_views, album_views,playlist_views, artist_views
+
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -11,13 +12,17 @@ urlpatterns = [
     path("playlists", playlist_views.getAllPlaylistByName, name = "playlistByName"),
     path("playlists/<int:playlist_id>/songs", song_views.listAllSongsByPlaylistId, name = "listByPlaylist"),
     path("playlists/create", playlist_views.addNewPlaylist, name="createPlaylist"),
-    path("playlists/<int:playlist_id>/add", playlist_views.addMusicToPlaylist),
-    path("playlists/<int:playlist_id>/remove", playlist_views.removeMusicFromPlaylist),
+    path("playlists/<int:playlist_id>/songs/<int:song_id>/add", playlist_views.addMusicToPlaylist),
+    path("playlists/<int:playlist_id>/songs/<int:song_id>/remove", playlist_views.removeMusicFromPlaylist),
     path("users/<int:user_id>/songs", song_views.getAllSongsByUserId, name = "favourites"),
     path("users/<int:user_id>/playlists", playlist_views.getAllPlaylistsByCreator, name="byCreator"),
     path("users/register", views.register),
-    #path("artists"),
+    path("users/login", views.login),
+    path("songs/<int:song_id>/add-to-favourites", views.addMusicToFavourites),
+    path("users", views.getAllUsersByNickname),
+    path("artists", artist_views.getAllArtistsByName),
     path("artists/<int:artist_id>/songs", song_views.getAllSongsByArtistId, name = "artistSongs"),
+
     
 
 ]

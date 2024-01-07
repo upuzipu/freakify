@@ -12,42 +12,26 @@ from ..utils import *
 import json
 
 
-class LazyEncoder(DjangoJSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Song):
-            return str(obj)
-        return super().default(obj) 
-class LazyEncoder(DjangoJSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Artist):
-            return str(obj)
-        return super().default(obj) 
+def personToJson(albums):
+    httpResponse = {}
+    responses = []
+    for i in albums:
+        response = {}
+        response['id'] = i.person_id
+        response['nickname'] = i.person_nickname
+        responses.append(response)
+    httpResponse["result"] = 'success'
+    httpResponse["body"] = responses
+    return HttpResponse(json.dumps(httpResponse,ensure_ascii=False)) 
 
-def getPahtByMusic(song: Song):
-    pathToMusic = "freakify/recources/songs/" + song.song_url
-    return pathToMusic
-def getMusicByPathToResponse(pathToMusic):
-     with open(pathToMusic, 'rb') as f:
-        response = HttpResponse(f.read(),content_type = 'audio/mp3')
-     response['Content-Length'] = os.path.getsize(pathToMusic)
-     return response
-
-def wrapMusicIntoResponse(song: Song):
-    return getMusicByPathToResponse(getPahtByMusic(song))
 
 def index(request):
-    latest_music = Song.objects.filter().all()
-    return wrapMusicIntoResponse(latest_music)
-
-def getMusicByName(request):
-    name = request.GET.get('name','')
-    music = Song.objects.get(song_name__icontains = name)
-    pathToMusic = getPahtByMusic(music)
-    return getMusicByPathToResponse(pathToMusic)
-
+    return HttpResponse("ты пидор")
     
 @csrf_exempt
 def register(request):
+    if(request.method!="POST"):
+        return returnErrorResponse(405, "ALLOWED METHOD: POST")
     cursor = connection.cursor()
     if request.method == 'POST':
         data = request.POST
@@ -59,50 +43,53 @@ def register(request):
     return HttpResponse("Registration done")
 
 @csrf_exempt
-def authorized(data):
-    email = data['email']
-    password = data['password']
-    print(email)
-    print(password)
-    person = Person.objects.get(person_email__exact=email)
-    print(person.person_id)
-    passwords = UsersPassword.objects.get(person__exact=person.person_id)
-    print(passwords.password)
-    if passwords.password != hashPassword(password):
-        returnErrorResponse(403, "Unauthorized")
-    return returnSuccessResponse(200)
-
-
-def listPlaylists(request):
+def login(request):
+    if(request.method!="POST"):
+        return returnErrorResponse(405, "ALLOWED METHOD: POST")
+    data = request.POST
+    try:
+        email = data['email']
+        password = data['password']
+        person = Person.objects.get(person_email__exact=email)
+        passwords = UsersPassword.objects.get(person__exact=person.person_id)
+        if passwords.password != hashPassword(password):
+            returnErrorResponse(403, "Wrong login or password")
+        return HttpResponse(person.person_nickname)
+    except:
+        return returnErrorResponse(403, "Wrong login or password")
+   
+def getAllUsersByNickname(request):
     name = request.GET.get('name','')
-    httpResponse = {}
-    responses = []
-    playlists = Playlist.objects.select_related('creator').filter(playlist_name__icontains=name).order_by('-update_time')
-    for playlist in playlists:
-        response = {}
-        response['name'] = playlist.playlist_name
-        response['creator'] = playlist.creator.person_nickname
-        response['lastUpdated'] = str(playlist.update_time)
-        responses.append(response)
-    httpResponse["result"] = 'success'
-    httpResponse["body"] = responses
-    return HttpResponse(json.dumps(httpResponse))
-    
-def listAllSongsByPlaylistId(request):
-    id = request.GET.get('playlistId','')
-    songs = PlaylistSongs.objects.select_related('song').filter(playlist_id__exact=id)
-    httpResponse = {}
-    responses = []
-    for i in songs:
-        response = {}
-        response['name'] = i.song.song_name
-        response['artist'] =i.song.artist.nickname
-        response['jenre'] = i.song.jenre.jenre_name
-        responses.append(response)
-    httpResponse["result"] = 'success'
-    httpResponse["body"] = responses
-    return HttpResponse(json.dumps(httpResponse))
+    offset = int(request.GET.get('offset',0))
+    limit = int(request.GET.get('limit', 1000)) + offset
+    if(name != ''):
+        music= Person.objects.filter(person_nickname__icontains=name)[offset:limit]
+    else:
+        music = Person.objects.all()[offset:limit]
+    return personToJson(music)
 
+@csrf_exempt 
+def addMusicToFavourites(request,song_id):
+    if request.method == "POST":
+        data = request.POST
+        id = ""
+        try:
+            id = authorized(data)
+        except:
+            return returnErrorResponse(403, "Wrong login or password") 
+        if Song.objects.filter(song_id__exact=song_id).exists():
+            try:
+                PersonFavouriteSong(person = Person.objects.get(person_id=id), song = Song.objects.get(song_id=song_id)).save()
+            except:
+                return returnErrorResponse(409, "Already in favourites")
+            
+        else:
+            return returnErrorResponse(404, "Песня не найдена")
+        return returnSuccessResponse(201)
+    else:
+        return returnErrorResponse(405, "ALLOWED METHOD: POST")
+    
+        
 
 
     
