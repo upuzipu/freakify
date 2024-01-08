@@ -154,6 +154,7 @@
     - ```
         {
             email: "email@email.com",
+            username: "asdasdas",
             password: "password"
         }
 - POST users/login
