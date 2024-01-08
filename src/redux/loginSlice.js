@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const loginSlice = createSlice({
     name: 'login',
-    initialState: '',
+    initialState: {
+        value: null
+    },
     reducers: {
         setLogin(state, action) {
-            return action.payload
+            state.value = action.payload
         }
     }
 })

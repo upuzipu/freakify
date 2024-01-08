@@ -1,3 +1,7 @@
+.MainText {
+    margin-top: 5px;
+}
+
 .wrapper{
     display: flex;
     justify-content: space-between;

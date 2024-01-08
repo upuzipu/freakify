@@ -6,8 +6,6 @@ import {useNavigate} from "react-router-dom";
 
 export function EmptyPage() {
     const navigate = useNavigate();
-
-    console.log('123' + 'lox')
     const navigateToLogin = () => {
         navigate('/login')
     }

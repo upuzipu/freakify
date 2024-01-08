@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./RegistrationPage.css"
 import {useNavigate} from "react-router-dom";
-
+import axios from "axios";
 
 export function RegistrationPage() {
     const [name, setName] = useState('');
@@ -15,12 +15,18 @@ export function RegistrationPage() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (name.length > 0 && email.length > 0 && password.length > 0) {
-            navigateToLogin()
-        }
-        else {
-            alert('xd')
-        }
+        useEffect(() => {
+            axios
+                .post("https://localhost:8080/users/register")
+                .then((response) => {
+                    if (response.data === "Registration done") {
+                        navigateToLogin()
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        })
     };
 
     return (
@@ -33,7 +39,7 @@ export function RegistrationPage() {
             <form onSubmit={handleSubmit}>
                 <div className="form">
                     <h3>
-                        Login
+                        Username
                     </h3>
                     <input name="username" onChange={(e) => setName(e.target.value)}/>
                     <h3>
@@ -49,7 +55,7 @@ export function RegistrationPage() {
                     </h3>
                     <input name="password" type="password"/>
                     <h3/>
-                    <input value={'BE FREAK'} type="submit" name="registerAccount" />
+                    <input value={'BE FREAK'} type="submit" name="registerAccount"/>
                 </div>
             </form>
         </div>
