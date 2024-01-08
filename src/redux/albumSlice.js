@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const loginSlice = createSlice({
-    name: 'login',
+const albumSlice = createSlice({
+    name: 'album',
     initialState: {
         value: null
     },
     reducers: {
-        setLogin(state, action) {
+        setAlbum(state, action) {
             state.value = action.payload
         }
     }
 })
 
-export const { setLogin } = loginSlice.actions
+export const { setAlbum } = albumSlice.actions
 
-export default loginSlice
+export default albumSlice

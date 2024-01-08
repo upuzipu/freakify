@@ -1,8 +1,8 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit"
-import loginSliceReducer from "./loginSlice"
+import {configureStore} from "@reduxjs/toolkit"
+import rootReducer from "./combineSlices";
 
-export default configureStore({
-    reducer: {
-        login: loginSliceReducer,
-    },
+const store = configureStore({
+    reducer: rootReducer
 })
+
+export default store;

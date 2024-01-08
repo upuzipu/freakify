@@ -1,13 +1,26 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import "./MainPage.css"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setPlaylist} from "../../redux/playlistSlice";
+import {setAlbum} from "../../redux/albumSlice";
+import {useNavigate} from "react-router-dom";
 
-export function MainPage(props) {
-    const username = props.username
+export function MainPage() {
     const [albums, setAlbums] = useState([]);
     const [playlists, setPlaylists] = useState([]);
-    const login = useSelector((state) => state.login.value)
+    const username = useSelector((state) => state.login.value)
+    const dispatcher = useDispatch()
+    const navigate = useNavigate()
+    const navigateToAlbum = () => {
+        navigate("/album")
+    }
+
+    const navigateToPlaylist = () => {
+        navigate("/playlist")
+    }
+
+
     useEffect(() => {
         axios
             .get("https://localhost:8080/albums?user=" + username.toString())
@@ -53,19 +66,37 @@ export function MainPage(props) {
         album_div.appendChild(newUl)
     }
 
+    const redirectPlaylist = event => {
+        const target = event.target;
+        if (target.tagName === 'SPAN') {
+            dispatcher(setPlaylist(target.innerText));
+            navigateToPlaylist()
+        }
+        event.preventDefault()
+    }
+
+    const redirectAlbum = event => {
+        const target = event.target;
+        if (target.tagName === 'SPAN') {
+            dispatcher(setAlbum(target.innerText));
+            navigateToAlbum()
+        }
+        event.preventDefault()
+    }
+
     return (
         <div>
-            <h1 className="MainText">Welcome back, {login}</h1>
+            <h1 className="MainText">Welcome back, {username}</h1>
             <div className="wrapper">
                 <div className="left">
                     <h1>Your Albums</h1>
                     <button>Add album</button>
                     <div id="albums">
                         <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                            <li onClick={redirectAlbum}><span>1</span></li>
+                            <li onClick={redirectAlbum}><span>2</span></li>
+                            <li onClick={redirectAlbum}><span>3</span></li>
+                            <li onClick={redirectAlbum}><span>4</span></li>
                         </ul>
                     </div>
                 </div>
@@ -74,10 +105,10 @@ export function MainPage(props) {
                     <button>Add playlist</button>
                     <div id="playlists">
                         <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                            <li onClick={redirectPlaylist}><span>5</span></li>
+                            <li onClick={redirectPlaylist}><span>6</span></li>
+                            <li onClick={redirectPlaylist}><span>7</span></li>
+                            <li onClick={redirectPlaylist}><span>8</span></li>
                         </ul>
                     </div>
                 </div>
