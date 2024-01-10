@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import "./LoginPage.css"
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setLogin} from "../../redux/loginSlice";
@@ -18,20 +17,23 @@ export function LoginPage() {
 
     const handleLogin = (event) => {
         event.preventDefault()
-        useEffect(() => {
-            axios
-                .post("https://localhost:8080/users/login")
-                .then((response) => {
-                    const login = response.data
-                    dispatch(setLogin(login))
-                    navigateToMain()
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        console.log("you lox")
-                    }
-                });
-        }, []);
+        dispatch(setLogin(email))
+        // useEffect(() => {
+        //     axios
+        //         .post("https://localhost:8080/users/login")
+        //         .then((response) => {
+        //             const login = response.data
+        //             dispatch(setLogin(login))
+        //             navigateToMain()
+        //         })
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log("you lox")
+        //             }
+        //         });
+        // }, []);
+
+        navigateToMain()
     };
 
     return (

@@ -1,8 +1,14 @@
 import {configureStore} from "@reduxjs/toolkit"
-import rootReducer from "./combineSlices";
+import loginSlice from "./loginSlice";
+import playlistSlice from "./playlistSlice";
+import albumSlice from "./albumSlice";
 
 const store = configureStore({
-    reducer: rootReducer
+    reducer: {
+        login: loginSlice.reducer,
+        album: albumSlice.reducer,
+        playlist: playlistSlice.reducer
+    }
 })
 
 export default store;

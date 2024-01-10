@@ -1,17 +1,23 @@
+.background {
+    opacity: .3;
+}
+
 .MainText {
     margin-top: 5px;
 }
 
-.wrapper{
+.wrapper {
     display: flex;
     justify-content: space-between;
     color: white;
     text-align: center;
 }
-.left{
+
+.left {
     width: 50%;
 }
-.right{
+
+.right {
     width: 50%;
 }
 

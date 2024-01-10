@@ -1,12 +1,24 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import "./AlbumPage.css"
 import axios from "axios";
+import {setPlaylist} from "../../redux/playlistSlice";
+import {setAlbum} from "../../redux/albumSlice";
+import {useNavigate} from "react-router-dom";
 
 export function AlbumPage() {
     const username = useSelector((state) => state.login.value)
     const albumName = useSelector((state) => state.album.value)
-    const chosenAlbum = findAlbumByValue("albumList", albumName)
+    const dispatcher = useDispatch()
 
+    const navigate = useNavigate()
+    const navigateToAlbum = () => {
+        navigate("/album")
+    }
+
+    const navigateToPlaylist = () => {
+        navigate("/playlist")
+    }
 
     function findAlbumByValue(parentId, value) {
         const parent = document.getElementById(parentId);
@@ -21,9 +33,28 @@ export function AlbumPage() {
         return null;
     }
 
+    const redirectPlaylist = event => {
+        const target = event.target;
+        if (target.tagName === 'SPAN') {
+            dispatcher(setPlaylist(target.innerText));
+        }
+        navigateToPlaylist()
+        event.preventDefault()
+    }
+
+    const redirectAlbum = event => {
+        const target = event.target;
+        if (target.tagName === 'span') {
+            console.log(target.innerText)
+            dispatcher(setAlbum(target.innerText));
+        }
+        navigateToAlbum()
+        event.preventDefault()
+    }
+
     return (
         <div>
-            <div>
+            <div className="background">
                 <h1 className="MainText">Welcome back, {username}</h1>
                 <div className="wrapper">
                     <div className="left">
@@ -31,10 +62,10 @@ export function AlbumPage() {
                         <button>Add album</button>
                         <div id="albums">
                             <ul id="albumList">
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
+                                <li onClick={redirectAlbum}><span>1</span></li>
+                                <li onClick={redirectAlbum}><span>2</span></li>
+                                <li onClick={redirectAlbum}><span>3</span></li>
+                                <li onClick={redirectAlbum}><span>4</span></li>
                             </ul>
                         </div>
                     </div>
@@ -43,10 +74,10 @@ export function AlbumPage() {
                         <button>Add playlist</button>
                         <div id="playlists">
                             <ul id="albumlist">
-                                <li>5</li>
-                                <li>6</li>
-                                <li>7</li>
-                                <li>8</li>
+                                <li onClick={redirectPlaylist}><span>5</span></li>
+                                <li onClick={redirectPlaylist}><span>6</span></li>
+                                <li onClick={redirectPlaylist}><span>7</span></li>
+                                <li onClick={redirectPlaylist}><span>8</span></li>
                             </ul>
                         </div>
                     </div>

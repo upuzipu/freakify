@@ -21,26 +21,26 @@ export function MainPage() {
     }
 
 
-    useEffect(() => {
-        axios
-            .get("https://localhost:8080/albums?user=" + username.toString())
-            .then((response) => {
-                setAlbums(response.data);
-                getAlbums()
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        axios
-            .get("https://localhost:8080/playlists?user=" + username.toString())
-            .then((response) => {
-                setPlaylists(response.data);
-                getPlaylists()
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios
+    //         .get("https://localhost:8080/albums?user=" + username.toString())
+    //         .then((response) => {
+    //             setAlbums(response.data);
+    //             getAlbums()
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    //     axios
+    //         .get("https://localhost:8080/playlists?user=" + username.toString())
+    //         .then((response) => {
+    //             setPlaylists(response.data);
+    //             getPlaylists()
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }, []);
 
     function getPlaylists() {
         let newUl = document.createElement('ul')
@@ -67,21 +67,22 @@ export function MainPage() {
     }
 
     const redirectPlaylist = event => {
+        event.preventDefault()
         const target = event.target;
         if (target.tagName === 'SPAN') {
             dispatcher(setPlaylist(target.innerText));
-            navigateToPlaylist()
         }
-        event.preventDefault()
+        navigateToPlaylist()
     }
 
     const redirectAlbum = event => {
-        const target = event.target;
-        if (target.tagName === 'SPAN') {
-            dispatcher(setAlbum(target.innerText));
-            navigateToAlbum()
-        }
         event.preventDefault()
+        const target = event.target;
+        console.log(target.tagName)
+        if (target.tagName === 'LI') {
+            dispatcher(setAlbum(target.innerText));
+        }
+        navigateToAlbum()
     }
 
     return (
