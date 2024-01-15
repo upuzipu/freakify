@@ -13,24 +13,25 @@ export function RegistrationPage() {
         navigate('/login')
     }
 
+    useEffect(() => {
+        axios
+            .post("http://localhost:8000/freakify/users/register", {
+                email: email,
+                username: name,
+                password: password
+            })
+            .then((response) => {
+                if (response.data === "Registration done") {
+                    navigateToLogin()
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    })
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        useEffect(() => {
-            axios
-                .post("https://localhost:8080/users/register", {
-                    email: email,
-                    username: name,
-                    password: password
-                })
-                .then((response) => {
-                    if (response.data === "Registration done") {
-                        navigateToLogin()
-                    }
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        })
     };
 
     return (

@@ -64,7 +64,7 @@ def addMusicToPlaylist(request, playlist_id,song_id):
     if(request.method!="POST"):
         return returnErrorResponse(405, "ALLOWED METHOD: POST")
 
-    data = request.POST
+    data = json.loads(request.body.decode())
     try:
         hasAuthority(data,playlist_id)
     except:
@@ -84,7 +84,7 @@ def addMusicToPlaylist(request, playlist_id,song_id):
 @csrf_exempt
 def removeMusicFromPlaylist(request, playlist_id,song_id):
     if(request.method == "PSOT"):
-        data = request.POST
+        data = json.loads(request.body.decode())
         
         try:
             hasAuthority(data,playlist_id)
@@ -101,7 +101,7 @@ def removeMusicFromPlaylist(request, playlist_id,song_id):
 @csrf_exempt
 def addNewPlaylist(request):
     if(request.method=="POST"):
-        data = request.POST
+        data = json.loads(request.body.decode())
         try:
             date =datetime.now()
             creator_id = authorized(data)

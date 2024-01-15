@@ -15,25 +15,27 @@ export function LoginPage() {
         navigate('/main')
     }
 
+    useEffect(() => {
+        axios
+            .post("http://localhost:8000/freakify/users/login", {
+                email: email,
+                password: password
+            })
+            .then((response) => {
+                const login = response.data
+                dispatch(setLogin(login))
+                navigateToMain()
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.log("you lox")
+                }
+            });
+    }, []);
+
     const handleLogin = (event) => {
         event.preventDefault()
-        useEffect(() => {
-            axios
-                .post("https://localhost:8080/users/login", {
-                    email: email,
-                    password: password
-                })
-                .then((response) => {
-                    const login = response.data
-                    dispatch(setLogin(login))
-                    navigateToMain()
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        console.log("you lox")
-                    }
-                });
-        }, []);
+        
 
         navigateToMain()
     };

@@ -33,8 +33,10 @@ def register(request):
     if(request.method!="POST"):
         return returnErrorResponse(405, "ALLOWED METHOD: POST")
     cursor = connection.cursor()
+   
     if request.method == 'POST':
-        data = request.POST
+        print(request.POST)
+        data = json.loads(request.body.decode())
         try:
             cursor.execute("call add_user(%s,%s,%s)",[data.get('username'),data.get('email'),hashPassword(data.get('password'))])
         finally:
@@ -46,7 +48,7 @@ def register(request):
 def login(request):
     if(request.method!="POST"):
         return returnErrorResponse(405, "ALLOWED METHOD: POST")
-    data = request.POST
+    data = json.loads(request.body.decode())
     try:
         email = data['email']
         password = data['password']
@@ -71,7 +73,7 @@ def getAllUsersByNickname(request):
 @csrf_exempt 
 def addMusicToFavourites(request,song_id):
     if request.method == "POST":
-        data = request.POST
+        data = json.loads(request.body.decode())
         id = ""
         try:
             id = authorized(data)
