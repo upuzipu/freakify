@@ -17,7 +17,11 @@ export function RegistrationPage() {
         event.preventDefault();
         useEffect(() => {
             axios
-                .post("https://localhost:8080/users/register")
+                .post("https://localhost:8080/users/register", {
+                    email: email,
+                    username: name,
+                    password: password
+                })
                 .then((response) => {
                     if (response.data === "Registration done") {
                         navigateToLogin()

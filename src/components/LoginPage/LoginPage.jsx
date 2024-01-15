@@ -17,21 +17,23 @@ export function LoginPage() {
 
     const handleLogin = (event) => {
         event.preventDefault()
-        dispatch(setLogin(email))
-        // useEffect(() => {
-        //     axios
-        //         .post("https://localhost:8080/users/login")
-        //         .then((response) => {
-        //             const login = response.data
-        //             dispatch(setLogin(login))
-        //             navigateToMain()
-        //         })
-        //         .catch((error) => {
-        //             if (error.response) {
-        //                 console.log("you lox")
-        //             }
-        //         });
-        // }, []);
+        useEffect(() => {
+            axios
+                .post("https://localhost:8080/users/login", {
+                    email: email,
+                    password: password
+                })
+                .then((response) => {
+                    const login = response.data
+                    dispatch(setLogin(login))
+                    navigateToMain()
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        console.log("you lox")
+                    }
+                });
+        }, []);
 
         navigateToMain()
     };
