@@ -6,7 +6,7 @@ from .views import views, song_views, album_views,playlist_views, artist_views
 urlpatterns = [
     path("", views.index, name="index"),
     path("songs", song_views.getAllSongsByName, name = "songs"),
-    path("songs/<int:song_id>/mp3", song_views.getMp3ById, name = "mp3"),
+    path("songs/<int:id>/mp3", song_views.getMp3ById, name = "mp3"),
     path("albums", album_views.getAllAlbumsByName, name = "albums"),
     path("albums/<int:album_id>/songs", song_views.getAllSongsByAlbumId, name = "songsByArtist"),
     path("playlists", playlist_views.getAllPlaylistByName, name = "playlistByName"),
