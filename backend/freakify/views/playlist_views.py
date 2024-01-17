@@ -18,13 +18,13 @@ def playlistToJson(albums):
         response = {}
         response['id'] = i.playlist_id
         response['name'] = str(i.playlist_name)
-        response['artist'] =i.creator.nickname
-        response['update_time'] = i.update_time
-        response['creation_date'] = i.creation_date
+        response['creator'] =i.creator.person_nickname
+        response['update_time'] = str(i.update_time)
+        response['creation_date'] = str(i.creation_date)
         responses.append(response)
     httpResponse["result"] = 'success'
     httpResponse["body"] = responses
-    return HttpResponse(json.dumps(httpResponse),ensure_ascii=False)
+    return HttpResponse(json.dumps(httpResponse,ensure_ascii=False))
 
 def authorized(data):
     email = data['email']

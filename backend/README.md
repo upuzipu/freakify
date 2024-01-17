@@ -74,7 +74,7 @@
             {
                 id = "str",
                 name = "name",
-                artist = "artist_name",
+                creator = "creator_name",
                 update_time = "1985‑09‑25 17:45:30.005"
                 creation_date = "1985‑09‑25 17:45:30.005"
             }
