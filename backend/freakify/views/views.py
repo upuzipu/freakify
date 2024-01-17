@@ -55,7 +55,7 @@ def login(request):
         person = Person.objects.get(person_email__exact=email)
         passwords = UsersPassword.objects.get(person__exact=person.person_id)
         if passwords.password != hashPassword(password):
-            returnErrorResponse(403, "Wrong login or password")
+            return returnErrorResponse(403, "Wrong login or password")
         return HttpResponse(person.person_nickname)
     except:
         return returnErrorResponse(403, "Wrong login or password")
